@@ -21,60 +21,113 @@ namespace projects_api.Controllers
 
 
         [HttpGet]
-        public List<Project> GetAllProjects()
+        public IActionResult GetAllProjects()
         {
-            return _projects;
+            if(_projects == null || _projects.Count == 0)
+            {
+                return NotFound("No projects found");
+            }
+
+            return Ok(_projects);
         }
 
         [HttpGet]
         [Route("completed")]
-        public List<Project> GetCompletedProjects()
+        public IActionResult GetCompletedProjects()
         {
-            return _projects.FindAll(p => p.IsCompleted == true);
+            var completed =  _projects.FindAll(p => p.IsCompleted == true);
+
+            if(completed == null)
+            {
+                return NotFound("No Completed Projects Found");
+            }
+
+            return Ok(completed);
         }
 
         [HttpGet]
         [Route("top")]
-        public List<Project> GetTopProjectsByRevenue()
+        public IActionResult GetTopProjectsByRevenue()
         {
-            return _projects.ToList().OrderByDescending(p => p.Revenue).Take(3).ToList();
+            var top3 = _projects.Where(p=> p.Revenue > 0).OrderByDescending(p => p.Revenue).Take(3).ToList();
+
+            if(top3 == null)
+            {
+                return NotFound("No top performing projects found");
+            }
+
+            return Ok(top3);
         }
 
         [HttpPost]
-        public Project CreateProject(Project project)
+        public IActionResult CreateProject(Project project)
         {
-            var isValidProject = validateProject(project);
+            try
+            {
+                var isValid = IsValidProject(project);
 
-            var maxProjectId = _projects.Max(p => p.Id);
-            project.Id = maxProjectId + 1;
+                if (!isValid)
+                {
+                    return BadRequest("Project data is not valid");
+                }
 
-            _projects.Add(project);
 
-            return project;
+                if (DoesProjectNameExist(project))
+                {
+                    return BadRequest("Project with same name already exists");
+                }
+
+                var maxProjectId = _projects.Max(p => p.Id);
+                project.Id = maxProjectId + 1;
+
+                _projects.Add(project);
+
+                return Ok(project);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            
         }
+
 
         [HttpDelete]
         [Route("{id}")]
-        public Project DeleteProject([FromRoute]int id)
+        public IActionResult DeleteProject([FromRoute]int id)
         {
             var project = _projects.Find(p => p.Id == id);
 
-            if (project != null)
+            if (project == null)
             {
-                _projects.Remove(project);
+                return NotFound("Project with ID:" + id + " not found");
             }
-
-            return project;
+            _projects.Remove(project);
+            return Ok(project);
+            
+            
         }
 
-        private bool validateProject(Project project)
+        private bool DoesProjectNameExist(Project project)
         {
-            if (_projects.Any(p => p.Id == project.Id) || _projects.Any(p => p.Name.ToLower().Equals(project.Name.ToLower())))
+            //check if _projects has a project with the same name
+            var existingProject = _projects.Find(p => p.Name == project.Name);
+
+            if (existingProject != null)
+                return true;
+            else
+                return false;
+        }
+
+        private bool IsValidProject(Project project)
+        {
+            if (project == null || project.Name.Length <= 0)
             {
                 return false;
             }
 
             return true;
         }
+
     }
 }
