@@ -71,5 +71,23 @@ namespace projects_api.Controllers
             }
 
         }
+
+        [HttpDelete]
+        [Route("{id:int}")]
+        public async Task<IActionResult> deleteProject([FromRoute] int id)
+        {
+            var project = await _projectcontext.Projects.FindAsync(id);
+
+            if(project == null)
+            {
+                return NotFound();
+            }
+            _projectcontext.Projects.Remove(project);
+
+            await _projectcontext.SaveChangesAsync();
+
+            return Ok();
+        }
+
     }
 }
