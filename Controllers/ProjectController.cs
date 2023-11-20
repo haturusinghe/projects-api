@@ -19,7 +19,6 @@ namespace projects_api.Controllers
             new Project { Id = 8, Name = "Project ZenSen", Revenue = 12312.75, IsCompleted = false },
         };
 
-
         [HttpGet]
         public IActionResult GetAllProjects()
         {
