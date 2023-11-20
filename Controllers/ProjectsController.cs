@@ -72,6 +72,25 @@ namespace projects_api.Controllers
 
         }
 
+        [HttpGet]
+        [Route("Completed")]
+        public async Task<IActionResult> getCompletedProjects()
+        {
+            var projects = await _projectcontext.Projects.ToListAsync();
+            var completeProjects = projects.FindAll(p => p.isCompleted == true);
+
+            if (completeProjects.Count == 0)
+            {
+                return NotFound("No Completed Projects Yet");
+            }
+            else
+            {
+                return Ok(completeProjects);
+            }
+
+        }
+
+
         [HttpDelete]
         [Route("{id:int}")]
         public async Task<IActionResult> deleteProject([FromRoute] int id)
