@@ -1,5 +1,8 @@
 var builder = WebApplication.CreateBuilder(args);
 
+//CORS
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins"; //this name is arbitary
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -7,9 +10,23 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        builder =>
+        {
+            builder.WithOrigins("http://localhost",
+                "http://localhost:4200")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .SetIsOriginAllowedToAllowWildcardSubdomains();
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+// Below here we add Middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -18,8 +35,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors(MyAllowSpecificOrigins); //Adds CORS middleware, need to follow the order and place this here
+
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+// In the ConfigureServices method of the Startup class, add the following code:
