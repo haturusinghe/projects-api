@@ -5,7 +5,7 @@ namespace projects_api.Controllers
 {
     [ApiController]
     [Route("api/projects")]
-    public class ProjectController : Controller
+    public class ProjectController : ControllerBase
     {
         private static List<Project> _projects = new List<Project>
         {

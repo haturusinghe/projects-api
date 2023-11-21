@@ -1,7 +1,7 @@
 var builder = WebApplication.CreateBuilder(args);
 
 //CORS
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins"; //this name is arbitary
 
 // Add services to the container.
 
@@ -28,6 +28,7 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+// Below here we add Middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -36,7 +37,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors(MyAllowSpecificOrigins); //Adds CORS middleware, need to follow the order and place this here
 
 app.UseAuthorization();
 
