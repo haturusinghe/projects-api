@@ -92,9 +92,10 @@ namespace projects_api.Controllers
 
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public IActionResult DeleteProject([FromRoute]int id)
         {
+            Console.WriteLine("Delete Project with ID:" + id);
             var project = _projects.Find(p => p.Id == id);
 
             if (project == null)
