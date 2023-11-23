@@ -2,7 +2,7 @@
 
 namespace ProjectsAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/projects")]
     [ApiController]
     public class ProjectController : ControllerBase
     {
