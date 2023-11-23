@@ -1,15 +1,15 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace ProjectsAPI.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
-    public class WeatherForecastController : ControllerBase
+    [ApiController]
+    public class ProjectController : ControllerBase
     {
         [HttpGet]
         public IActionResult Index()
         {
-            return Ok();
+            return Ok("Hello World");
         }
     }
 }
