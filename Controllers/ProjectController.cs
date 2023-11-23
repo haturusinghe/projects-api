@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProjectsAPI.Data.Entities;
 
 namespace ProjectsAPI.Controllers
 {
@@ -6,10 +7,43 @@ namespace ProjectsAPI.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
+
+
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult GetAllProjects()
         {
-            return Ok("Hello World");
+            return Ok();
         }
+
+        [HttpGet]
+        [Route("completed")]
+        public IActionResult GetCompletedProjects()
+        {
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("top")]
+        public IActionResult GetTopProjectsByRevenue()
+        {
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult CreateProject(Project project)
+        {
+            return Ok();
+
+        }
+
+
+        [HttpDelete]
+        [Route("{id:int}")]
+        public IActionResult DeleteProject([FromRoute] int id)
+        {
+            return Ok();
+
+        }
+
     }
 }
