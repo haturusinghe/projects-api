@@ -32,7 +32,7 @@ namespace ProjectsAPI.Controllers
         [HttpPost]
         public IActionResult CreateProject(Project project)
         {
-            return Ok();
+            return Ok(project);
 
         }
 
@@ -41,7 +41,7 @@ namespace ProjectsAPI.Controllers
         [Route("{id:int}")]
         public IActionResult DeleteProject([FromRoute] int id)
         {
-            return Ok();
+            return Ok(id);
 
         }
 
