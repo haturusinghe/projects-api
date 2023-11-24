@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProjectsAPI.Data;
 using ProjectsAPI.Data.Entities;
+using ProjectsAPI.Repositories.Interfaces;
 
 namespace ProjectsAPI.Controllers
 {
@@ -7,6 +9,12 @@ namespace ProjectsAPI.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
+        private readonly IUnitOfWork _unitOfWork;
+
+        public ProjectController(UnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
 
 
         [HttpGet]
