@@ -6,7 +6,9 @@
     {
         //these are the usual actions we do with each entity
         Task<IEnumerable<T>> GetAll();
-        Task<T?> GetById(int id);
+        Task<T?> GetById(int id); //The T? indicates that the method will return a nullable instance of the generic type T.
+                                  //If an entity with the provided ID exists in the database, it will be returned;
+                                  //otherwise, null will be returned.
         Task<T> Create(T entity);
         Task<T> Update(T entity);
         Task<T> Delete(int id);
