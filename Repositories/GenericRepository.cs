@@ -20,13 +20,13 @@ namespace ProjectsAPI.Repositories
             this._dbSet = context.Set<T>();
         }
 
-        public async Task<T> Create(T entity)
+        public virtual async Task<T> Create(T entity)
         {
             await _dbSet.AddAsync(entity);
             return entity;
         }
 
-        public async Task<T> Delete(int id)
+        public virtual async Task<T> Delete(int id)
         {
             var project  = await _dbSet.FindAsync(id);
             if(project == null)
@@ -38,12 +38,12 @@ namespace ProjectsAPI.Repositories
             return project;
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public virtual async Task<IEnumerable<T>> GetAll()
         {
             return await _dbSet.ToListAsync();
         }
 
-        public async Task<T?> GetById(int id)
+        public virtual async Task<T?> GetById(int id)
         {   
             // this can be null
             return await _dbSet.FindAsync(id);
