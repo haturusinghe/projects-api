@@ -19,7 +19,88 @@ namespace Projects_api.Controllers
         public async Task<IActionResult> getAllProjects()
         {
             var projects = await _projectcontext.Projects.ToListAsync();
-            return Ok(projects);
+            if (projects.Count == 0)
+            {
+                return NotFound("Projects Not Found");
+            }
+            else
+            {
+                return Ok(projects);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> createProject([FromBody] Project project)
+        {
+           
+
+            if (project.Name == null)
+            {
+                return BadRequest("Please Enter Project Name");
+            }
+            if (project.Revenue == 0)
+            {
+                return BadRequest("Please Enter Project Revenue");
+            }
+
+            await _projectcontext.Projects.AddAsync(project);
+            await _projectcontext.SaveChangesAsync();
+
+            return Ok(project);
+
+        }
+
+        [HttpGet]
+        [Route("top")]
+        public async Task<IActionResult> getTopProjectsByRevenue()
+        {
+            var projects = await _projectcontext.Projects.ToListAsync();
+            var topProjects = projects.OrderByDescending(p => p.Revenue).Take(3).ToList();
+
+            if (topProjects.Count == 0)
+            {
+                return NotFound("No Top Performed Projects Yet");
+            }
+            else
+            {
+                return Ok(topProjects);
+            }
+
+        }
+
+        [HttpGet]
+        [Route("Completed")]
+        public async Task<IActionResult> getCompletedProjects()
+        {
+            var projects = await _projectcontext.Projects.ToListAsync();
+            var completeProjects = projects.FindAll(p => p.isCompleted == true);
+
+            if (completeProjects.Count == 0)
+            {
+                return NotFound("No Completed Projects Yet");
+            }
+            else
+            {
+                return Ok(completeProjects);
+            }
+
+        }
+
+        [HttpDelete]
+        [Route("{id:int}")]
+        public async Task<IActionResult> deleteProject([FromRoute] int id)
+        {
+            var project = await _projectcontext.Projects.FindAsync(id);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+            _projectcontext.Projects.Remove(project);
+
+            await _projectcontext.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }
