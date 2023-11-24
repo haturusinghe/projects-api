@@ -18,28 +18,30 @@ namespace ProjectsAPI.Controllers
 
 
         [HttpGet]
-        public IActionResult GetAllProjects()
+        public async Task<IActionResult> GetAllProjects()
         {
-            return Ok();
+            return Ok(await _unitOfWork.Projects.GetAll());
         }
 
         [HttpGet]
         [Route("completed")]
-        public IActionResult GetCompletedProjects()
+        public async Task<IActionResult> GetCompletedProjects()
         {
-            return Ok();
+            return Ok(await _unitOfWork.Projects.GetCompleted());
         }
 
         [HttpGet]
         [Route("top")]
-        public IActionResult GetTopProjectsByRevenue()
+        public async Task<IActionResult> GetTopProjectsByRevenue()
         {
-            return Ok();
+            return Ok(await _unitOfWork.Projects.GetTopByRevenue());
         }
 
         [HttpPost]
-        public IActionResult CreateProject(Project project)
+        public async Task<IActionResult> CreateProject(Project project)
         {
+            await _unitOfWork.Projects.Create(project);
+            await _unitOfWork.CompleteAsync();
             return Ok(project);
 
         }
@@ -47,9 +49,21 @@ namespace ProjectsAPI.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
-        public IActionResult DeleteProject([FromRoute] int id)
+        public async Task<IActionResult> DeleteProject([FromRoute] int id)
         {
-            return Ok(id);
+            var project = await _unitOfWork.Projects.GetById(id);
+
+            if(project == null)
+            {
+                return NotFound();
+            }
+
+            await _unitOfWork.Projects.Delete(project);
+
+            await _unitOfWork.CompleteAsync();
+            
+            
+            return Ok(project);
 
         }
 
