@@ -26,17 +26,7 @@ namespace ProjectsAPI.Repositories
             return entity;
         }
 
-        public virtual async Task<T> Delete(int id)
-        {
-            var project  = await _dbSet.FindAsync(id);
-            if(project == null)
-            {
-                return null;
-            }
-
-            _dbSet.Remove(project);
-            return project;
-        }
+        
 
         public virtual async Task<IEnumerable<T>> GetAll()
         {
@@ -52,6 +42,12 @@ namespace ProjectsAPI.Repositories
         public async Task<T> Update(T entity)
         {
             _dbSet.Update(entity);
+            return entity;
+        }
+
+        public async Task<T> Delete(T entity)
+        {
+            _dbSet.Remove(entity);
             return entity;
         }
     }

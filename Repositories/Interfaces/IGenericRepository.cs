@@ -11,6 +11,6 @@
                                   //otherwise, null will be returned.
         Task<T> Create(T entity);
         Task<T> Update(T entity);
-        Task<T> Delete(int id);
+        Task<T> Delete(T entity);
     }
 }
