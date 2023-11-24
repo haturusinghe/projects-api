@@ -20,29 +20,39 @@ namespace ProjectsAPI.Repositories
             this._dbSet = context.Set<T>();
         }
 
-        public Task<T> Create(T entity)
+        public async Task<T> Create(T entity)
         {
-            throw new NotImplementedException();
+            await _dbSet.AddAsync(entity);
+            return entity;
         }
 
-        public Task<T> Delete(int id)
+        public async Task<T> Delete(int id)
         {
-            throw new NotImplementedException();
+            var project  = await _dbSet.FindAsync(id);
+            if(project == null)
+            {
+                return null;
+            }
+
+            _dbSet.Remove(project);
+            return project;
         }
 
-        public Task<IEnumerable<T>> GetAll()
+        public async Task<IEnumerable<T>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _dbSet.ToListAsync();
         }
 
-        public Task<T> GetById(int id)
-        {
-            throw new NotImplementedException();
+        public async Task<T?> GetById(int id)
+        {   
+            // this can be null
+            return await _dbSet.FindAsync(id);
         }
 
-        public Task<T> Update(T entity)
+        public async Task<T> Update(T entity)
         {
-            throw new NotImplementedException();
+            _dbSet.Update(entity);
+            return entity;
         }
     }
 
