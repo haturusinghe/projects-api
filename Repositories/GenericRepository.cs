@@ -8,14 +8,11 @@ namespace ProjectsAPI.Repositories
     {
         protected readonly ProjectsApiDbContext _context;
         internal DbSet<T> _dbSet;
-        protected readonly ILogger _logger;
 
-       public GenericRepository(ProjectsApiDbContext context, ILogger logger)
+       public GenericRepository(ProjectsApiDbContext context)
         {
             // initiate the context and the logger through dependency injection
             _context = context;
-            _logger = logger;
-
 
             this._dbSet = context.Set<T>();
         }

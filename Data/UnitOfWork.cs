@@ -6,15 +6,13 @@ namespace ProjectsAPI.Data
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
         private readonly ProjectsApiDbContext _context;
-        private readonly ILogger _logger;
         public IProjectRepository Projects { get; private set; }
 
-        public UnitOfWork(ProjectsApiDbContext context, ILogger logger)
+        public UnitOfWork(ProjectsApiDbContext context)
         {
             _context = context;
-            _logger = logger;
             
-            Projects = new ProjectRepository(_context, _logger);
+            Projects = new ProjectRepository(_context);
         }
         
 

@@ -7,7 +7,7 @@ namespace ProjectsAPI.Repositories
 {
     public class ProjectRepository : GenericRepository<Project>, IProjectRepository
     {
-        public ProjectRepository(ProjectsApiDbContext context, ILogger logger) : base(context, logger)
+        public ProjectRepository(ProjectsApiDbContext context) : base(context)
         {
         }
 
@@ -19,7 +19,7 @@ namespace ProjectsAPI.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed to get completed projects: {ex}");
+                Console.WriteLine($"Failed to get completed projects: {ex}");
                 return null;
             }
         }
@@ -32,7 +32,7 @@ namespace ProjectsAPI.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed to get top projects by revenue: {ex}");
+                Console.WriteLine($"Failed to get top projects by revenue: {ex}");
                 return null;
             }
         }
