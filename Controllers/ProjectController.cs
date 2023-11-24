@@ -11,7 +11,7 @@ namespace ProjectsAPI.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public ProjectController(UnitOfWork unitOfWork)
+        public ProjectController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
