@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectsAPI.Data;
+using ProjectsAPI.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,8 @@ builder.Services.AddSwaggerGen();
 //inject DbContext to DI container so that we can utilize it
 builder.Services.AddDbContext<ProjectsApiDbContext>(options => 
         options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
