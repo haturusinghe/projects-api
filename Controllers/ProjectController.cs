@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjectsAPI.Data;
 using ProjectsAPI.Data.Entities;
 
-namespace projects_api.Controllers
+namespace ProjectsAPI.Controllers
 {
     [ApiController]
     [Route("api/projects")]
