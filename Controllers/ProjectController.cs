@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectsAPI.Data;
 using ProjectsAPI.Data.Entities;
+using ProjectsAPI.Interfaces;
 
 namespace ProjectsAPI.Controllers
 {
@@ -9,42 +10,37 @@ namespace ProjectsAPI.Controllers
     [Route("api/projects")]
     public class ProjectController : ControllerBase
     {
-        private readonly ProjectsApiDbContext _dbContext;
+        private readonly IProjectRepository _projectRepository;
 
-        public ProjectController(ProjectsApiDbContext dbContext)
+        public ProjectController(IProjectRepository projectRepository)
         {
-            _dbContext = dbContext;
+            _projectRepository = projectRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllProjects()
         {
-            var projects = await _dbContext.Projects.ToListAsync();
-            return Ok(projects);
+            return Ok(await _projectRepository.GetAll());
         }
 
         [HttpGet]
         [Route("completed")]
         public async Task<IActionResult> GetCompletedProjects()
         {
-            var completedProjects = await _dbContext.Projects.Where(p => p.IsCompleted).ToListAsync();
-            return Ok(completedProjects);
+            return Ok(await _projectRepository.GetCompleted());
         }
 
         [HttpGet]
         [Route("top")]
         public async Task<IActionResult> GetTopProjectsByRevenue()
         {
-            var topProjects = await _dbContext.Projects.Where(p=> p.Revenue > 0).OrderByDescending(p => p.Revenue).Take(3).ToListAsync();
-            return Ok(topProjects);
+            return Ok(await _projectRepository.GetTopByRevenue());
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateProject(Project project)
         {
-            _dbContext.Projects.Add(project);
-            await _dbContext.SaveChangesAsync();
-            return Ok(project);
+            return Ok(await _projectRepository.Create(project));
         }
 
 
@@ -52,13 +48,11 @@ namespace ProjectsAPI.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> DeleteProject([FromRoute]int id)
         {
-            var project = await _dbContext.Projects.FirstOrDefaultAsync(p => p.Id == id);
-            if (project == null)
+            var project = await _projectRepository.DeleteById(id);
+            if(project == null)
             {
                 return NotFound();
             }
-            _dbContext.Projects.Remove(project);
-            await _dbContext.SaveChangesAsync();
             return Ok(project);
 
         }
