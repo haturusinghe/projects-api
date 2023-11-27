@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using ProjectsAPI.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 //CORS
@@ -11,6 +14,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//register the ProjectsApiDbContext in the dependency injection container.
+//This DbContext is a class from Entity Framework Core that represents a session with the database, allowing querying and saving data.
+builder.Services.AddDbContext<ProjectsApiDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnection")));
 
 
 //Calls AddCors with a lambda expression.
