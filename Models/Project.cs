@@ -1,4 +1,4 @@
-﻿namespace projects_api.Models
+﻿namespace ProjectsAPI.Models
 {
     public class Project
     {

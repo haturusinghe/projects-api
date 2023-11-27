@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using projects_api.Models;
+using ProjectsAPI.Models;
 
 namespace projects_api.Controllers
 {
