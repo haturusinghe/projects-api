@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ProjectsAPI.Data;
 using ProjectsAPI.Data.Entities;
 
@@ -16,37 +17,49 @@ namespace projects_api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllProjects()
+        public async Task<IActionResult> GetAllProjects()
         {
-            return Ok();
+            var projects = await _dbContext.Projects.ToListAsync();
+            return Ok(projects);
         }
 
         [HttpGet]
         [Route("completed")]
-        public IActionResult GetCompletedProjects()
+        public async Task<IActionResult> GetCompletedProjects()
         {
-            return Ok();
+            var completedProjects = await _dbContext.Projects.Where(p => p.IsCompleted).ToListAsync();
+            return Ok(completedProjects);
         }
 
         [HttpGet]
         [Route("top")]
-        public IActionResult GetTopProjectsByRevenue()
+        public async Task<IActionResult> GetTopProjectsByRevenue()
         {
-            return Ok();
+            var topProjects = await _dbContext.Projects.Where(p=> p.Revenue > 0).OrderByDescending(p => p.Revenue).Take(3).ToListAsync();
+            return Ok(topProjects);
         }
 
         [HttpPost]
-        public IActionResult CreateProject(Project project)
+        public async Task<IActionResult> CreateProject(Project project)
         {
-            return Ok();
+            _dbContext.Projects.Add(project);
+            await _dbContext.SaveChangesAsync();
+            return Ok(project);
         }
 
 
         [HttpDelete]
         [Route("{id:int}")]
-        public IActionResult DeleteProject([FromRoute]int id)
+        public async Task<IActionResult> DeleteProject([FromRoute]int id)
         {
-            return Ok();
+            var project = await _dbContext.Projects.FirstOrDefaultAsync(p => p.Id == id);
+            if (project == null)
+            {
+                return NotFound();
+            }
+            _dbContext.Projects.Remove(project);
+            await _dbContext.SaveChangesAsync();
+            return Ok(project);
 
         }
 
