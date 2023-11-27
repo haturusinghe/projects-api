@@ -17,7 +17,7 @@ namespace ProjectsAPI.Repositories
 
         public virtual async Task<T> Create(T entity)
         {
-            await _context.AddAsync(entity);
+            _dbSet.Add(entity);
             return entity;
         }
 
