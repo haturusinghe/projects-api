@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectsAPI.Data;
+using ProjectsAPI.Interfaces;
+using ProjectsAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,8 @@ builder.Services.AddSwaggerGen();
 //This DbContext is a class from Entity Framework Core that represents a session with the database, allowing querying and saving data.
 builder.Services.AddDbContext<ProjectsApiDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnection")));
+
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 
 
 //Calls AddCors with a lambda expression.
