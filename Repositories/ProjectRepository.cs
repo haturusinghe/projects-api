@@ -11,6 +11,36 @@ namespace ProjectsAPI.Repositories
         {
         }
 
+        public override async Task<Project> Create(Project entity)
+        {
+            entity.Id = 0;
+            await base.Create(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
+
+        public override async Task<Project> Delete(Project entity)
+        {
+            await base.Delete(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
+
+        public async Task<Project?> DeleteById(int id)
+        {
+            var project = await GetById(id);
+
+            if(project != null)
+            {
+               return await Delete(project);
+            }
+
+            return null;
+        }
+
+        
+
+
         public async Task<IEnumerable<Project>> GetCompleted()
         {
            return await _context.Projects.Where(p => p.IsCompleted == true).ToListAsync();
@@ -21,5 +51,6 @@ namespace ProjectsAPI.Repositories
             return await _context.Projects.Where(p => p.Revenue > 0).
                 OrderByDescending(p => p.Revenue).Take(3).ToListAsync(); 
         }
+
     }
 }
